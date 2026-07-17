@@ -10,6 +10,9 @@
 /*.jpeg
 /*.png
 
+# claude session data
+.claude/data/
+
 # Curated images that the README and example plans depend on stay tracked
 !images/
 !specs/

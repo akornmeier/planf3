@@ -1,6 +1,18 @@
 # Image Generation
 
-Fill or update the embedded images in an existing plan `.html` file. Pick the sub-workflow based on the incoming `USER_PROMPT`:
+Fill or update the embedded images in an existing plan `.html` file.
+
+## Backend Check (do this first)
+
+Run `[ -n "$OPENAI_API_KEY" ] && echo gpt-image || echo diagram-design`.
+
+- `gpt-image` → follow this file as written (scripts below).
+- `diagram-design` → the `diagram-design` skill is the backend instead. Invoke it via the Skill tool, ask it for one diagram per `{{...IMAGE` slot using that slot's subject, and inline the resulting SVG directly into the slot's `<figure>` (replace the `<!-- {{...IMAGE: ...}} -->` comment with the `<svg>` element; keep the `<figcaption>`). No PNGs, no `IMAGES_OUTPUT_DIR`. Skip the rest of this file except the shared rules, which still apply, plus these three:
+  - **Colors come from the plan, not the skin.** Have the SVG reference the plan's own custom properties — `fill="var(--accent)"`, `stroke="var(--ink)"` — never diagram-design's hardcoded hexes. Inline SVG resolves `var()` against the page, so this is what keeps the synced visual identity.
+  - **Define the roles it needs in `:root`.** diagram-design assumes `--bg`, `--ink`, `--muted`, `--soft`, `--accent`, `--accent-tint`. An undeclared var silently renders as no fill. Add any missing ones to the plan's `:root` before embedding.
+  - **No font `<link>`.** The plan must stay self-contained, so diagram-design's Google Fonts line is out. Use fallback stacks: `'Geist', ui-sans-serif, system-ui, sans-serif` and `'Geist Mono', ui-monospace, monospace`.
+
+Pick the sub-workflow based on the incoming `USER_PROMPT`:
 
 | Sub-workflow | When to call it |
 | --- | --- |

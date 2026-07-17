@@ -1,7 +1,7 @@
 ---
 name: planf3
 description: Creates a concise engineering implementation plan based on user requirements and saves it to specs directory
-argument-hint: "[user-prompt] [questionable]"
+argument-hint: "[user-prompt] [--questionable]"
 ---
 
 # Plan F3
@@ -12,8 +12,9 @@ Create a detailed, **HTML-first** implementation plan based on the `USER_PROMPT`
 
 ## Variables
 
-USER_PROMPT: $1
-QUESTIONABLE: $2 - default false
+RAW_ARGS: $ARGUMENTS
+USER_PROMPT: `RAW_ARGS` with any `--questionable` flag removed and surrounding whitespace trimmed
+QUESTIONABLE: true if `RAW_ARGS` contains `--questionable`, otherwise false
 PLAN_OUTPUT_DIRECTORY: `specs/`
 PLAN_FILE: `PLAN_OUTPUT_DIRECTORY/<descriptive-kebab-name>.html`
 IMAGES_OUTPUT_DIR: `PLAN_OUTPUT_DIRECTORY/<plan-name>/`
